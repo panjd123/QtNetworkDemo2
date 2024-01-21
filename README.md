@@ -8,7 +8,7 @@ This is a network demo for this [project](https://github.com/panjd123/Surakarta)
 3. 客户端，`ip`地址默认为本地回环地址，设置`ip`与端口后`Connect`连接到服务端，成功连接后`ip`一行出现`Connected`并发送`READY_OP`
 4. 客户端连接成功后，在`Send`左侧输入信息，`Send`即可将信息以`CHAT_OP`形式发送至服务端，并转发至另一连接的客户端（如果有）
 5. 客户端收到信息呈现在`Receive`左侧
-6. 客户端`Disconnect`后断开与服务端连接（此`demo`并未发送`LEAVE_OP`），重复步骤`3`
+6. 客户端`Disconnect`后断开与服务端连接，重复步骤`3`
 7. 端口取值为`[1,65535]`内的整数
 
 ## 文件说明
