@@ -25,7 +25,23 @@ void MainWindow::listen_port() {
     ui->PortEdit->setText("Listening...");
 }
 
+void MainWindow::remove_client(QTcpSocket* client) {
+    if (client == client1) {
+        client1 = nullptr;
+        ui->ShowClient1->setText("");
+    }
+    else if (client == client2) {
+        client2 = nullptr;
+        ui->ShowClient2->setText("");
+    }
+    clients.remove(client);
+}
+
 void MainWindow::receive_from_client(QTcpSocket* client, NetworkData data) {
+    if (data.op == OPCODE::LEAVE_OP) {
+        remove_client(client);
+        return;
+    }
     if (!clients.contains(client)) {
         if (clients.size() >= max_clients) {
             QMessageBox::warning(this, "Warning", "The server is full!");
