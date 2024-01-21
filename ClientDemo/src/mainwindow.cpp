@@ -39,6 +39,7 @@ void MainWindow::connectToServer() {
 }
 
 void MainWindow::disconnectFromServer() {
+    socket->send(NetworkData(OPCODE::LEAVE_OP, "", "", ""));
     socket->bye();
     ui->connect_button->setEnabled(true);
     ui->disconnect_button->setEnabled(false);
