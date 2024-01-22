@@ -16,5 +16,4 @@ This is a network demo for this [project](https://github.com/panjd123/Surakarta)
 - `./ServerDemo/src/`下为服务端`demo`源码
 - `./ClientDemo/src/`下为客户端`demo`源码
 - 项目均为`CMake`构建
-- `./Release/`下为可执行`demo`文件
 - `./NetworkLibrary/`下为第三阶段提供的网络库
