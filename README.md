@@ -17,3 +17,43 @@ This is a network demo for this [project](https://github.com/panjd123/Surakarta)
 - `./ClientDemo/src/`下为客户端`demo`源码
 - 项目均为`CMake`构建
 - `./NetworkLibrary/`下为第三阶段提供的网络库
+
+## 编译指南
+在`Windows 11`环境下，本项目可通过三种方式编译
+
+- 使用`Qt Creator`打开`ClientDemo/src`与`ServerDemo/src`下的`CMakeLists.txt`文件，直接构建即可。
+
+- 使用`vscode`编译，参考主仓库中的[教程](https://github.com/panjd123/Surakarta/blob/main/guidance/cmake/Vscode%20%2B%20CMake%20%2B%20Qt.md)。
+
+- 命令行编译，需要将请将库`Qt6`添加至`环境变量-系统变量-Path` `F:\Qt6\6.6.1\mingw_64\bin` `F:\Qt6\6.6.1\mingw_64\lib` 替换成你的 Qt6 绝对路径
+    编译并运行`ClientDemo`的步骤如下：
+    ```
+    > cd ClientDemo
+    > mkdir build
+    > cd build
+    > cmake -G Ninja ../src
+    > ninja
+    > ./bin/ClientDemo
+    ```
+    编译并运行`ServerDemo`的步骤如下：
+    ```
+    > cd ServerDemo
+    > mkdir build
+    > cd build
+    > cmake -G Ninja ../src
+    > ninja
+    > ./bin/ServerDemo
+    ```
+
+## Q&A
+
+### Q：什么是`Ninja`？
+`Ninja`是`CMake`的一个生成器，可以通过`-G Ninja`参数生成`Ninja`构建文件。由于`Windows`没有`make`，`Ninja`是一个很好的替代品。 [Ninja官方文档](https://ninja-build.org/)
+
+### Q：我可以使用其他生成器吗？
+当然可以，`Visual Studio`、`MinGW`、`MSYS2`等都是可以的，只是`Ninja`更快更轻量。
+
+例如，你可以使用命令`cmake -G "MinGW Makefiles" ../src`生成`MinGW`构建文件。
+
+### Q：如何安装`Ninja`？
+可以参考[这篇博客](https://nirvana1997.github.io/Ninja%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/)，安装非常便捷，这也是为什么推荐使用`Ninja`。
