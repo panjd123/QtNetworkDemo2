@@ -28,19 +28,21 @@ This is a network demo for this [project](https://github.com/panjd123/Surakarta)
 - 命令行编译，需要将请将库`Qt6`添加至`环境变量-系统变量-Path` `F:\Qt6\6.6.1\mingw_64\bin` `F:\Qt6\6.6.1\mingw_64\lib` 替换成你的 Qt6 绝对路径
     编译并运行`ClientDemo`的步骤如下：
     ```
+    // powershell
     > cd ClientDemo
     > mkdir build
     > cd build
-    > cmake -G Ninja ../src
+    > cmake -G Ninja ../src -DCMAKE_CXX_COMPILER:FILEPATH=F:\\Qt6\\Tools\\mingw1120_64\\bin\\g++.exe  // 请替换成你的 Qt6 自带编译器的绝对路径
     > ninja
     > ./bin/ClientDemo
     ```
     编译并运行`ServerDemo`的步骤如下：
     ```
+    // powershell
     > cd ServerDemo
     > mkdir build
     > cd build
-    > cmake -G Ninja ../src
+    > cmake -G Ninja ../src -DCMAKE_CXX_COMPILER:FILEPATH=F:\\Qt6\\Tools\\mingw1120_64\\bin\\g++.exe  // 请替换成你的 Qt6 自带编译器的绝对路径
     > ninja
     > ./bin/ServerDemo
     ```
