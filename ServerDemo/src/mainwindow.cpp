@@ -7,19 +7,23 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    server = new NetworkServer(this);
+    server = new NetworkServer(this); // 创建一个服务器对象，其父对象为当前窗口
 
     ui->ShowClient1->setReadOnly(true);
     ui->ShowClient2->setReadOnly(true);
 
-    connect(ui->PortButton, &QPushButton::clicked, this, &MainWindow::listen_port);
-    connect(ui->restart, &QPushButton::clicked, this, &MainWindow::restart_server);
+    connect(ui->PortButton, &QPushButton::clicked, this, &MainWindow::listen_port); // 开启服务器监听
+    connect(ui->restart, &QPushButton::clicked, this, &MainWindow::restart_server); // 重启服务器
     connect(server, &NetworkServer::receive, this, &MainWindow::receive_from_client);
+    // receive 是服务端收到消息后发出的信号，receive_from_client 是处理这个信号的槽函数
 }
 
 void MainWindow::listen_port() {
     this->port = ui->PortEdit->text().toInt();
     server->listen(QHostAddress::Any, this->port);
+    // 一行代码搞定监听，它会在所有 ip 地址上监听指定端口 port
+    // 所谓监听，就是在网络上服务器要开始盯住某个端口，此时客户端可以通过这个端口和服务器取得联系
+    // QHostAddress::Any 表示监听所有 ip 地址，在不考虑安全的情况下，这是一个比较方便的选择，你不用纠结为什么
     ui->PortButton->setEnabled(false);
     ui->PortEdit->setReadOnly(true);
     ui->PortEdit->setText("Listening...");
@@ -38,6 +42,9 @@ void MainWindow::remove_client(QTcpSocket* client) {
 }
 
 void MainWindow::receive_from_client(QTcpSocket* client, NetworkData data) {
+    // client 是发送消息的客户端，data 是消息内容
+    // 以下代码首先处理客户端的连接和断开，然后处理从客户端收到的消息，显示在界面上并转发给另一个客户端
+    // 你们在游戏里要做类似的事情，只不过处理不仅仅是显示，而是对应的游戏逻辑
     if (data.op == OPCODE::LEAVE_OP) {
         remove_client(client);
         return;
@@ -68,10 +75,12 @@ void MainWindow::receive_from_client(QTcpSocket* client, NetworkData data) {
 }
 
 void MainWindow::send_to_another_client(QTcpSocket* another, NetworkData data) {
+    // 发送消息给一个客户端，这个程序里实际上做的事情是转发消息
     this->server->send(another, data);
 }
 
 void MainWindow::restart_server() {
+    // 如果你要重启服务器，就像其他 QObject 一样，你需要 disconnect 再 connect 回来一些信号槽
     server->close();
     clients.clear();
     client1 = nullptr;
