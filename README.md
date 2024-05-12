@@ -18,6 +18,8 @@ This is a network demo for this [project](https://github.com/panjd123/Surakarta)
 - 项目均为`CMake`构建
 - `./NetworkLibrary/`下为第三阶段提供的网络库
 
+你只需主要关注 `mainwindow.cpp` 文件即可，其他都是无关紧要的 ui 等。
+
 ## 编译指南
 在`Windows 11`环境下，本项目可通过三种方式编译
 
