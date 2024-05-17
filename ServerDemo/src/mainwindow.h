@@ -31,6 +31,7 @@ private:
     QTcpSocket* client2 = nullptr;
     void send_to_another_client(QTcpSocket* another, NetworkData data);
     void remove_client(QTcpSocket* client);
+    void remove_all_clients();
 
 private slots:
     void listen_port();

@@ -1,21 +1,37 @@
 #include "mainwindow.h"
+#include <QTimer>
 #include "./ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
-{
+void MainWindow::remove_all_clients() {
+    clients.clear();
+    if(client1){
+        client1->close();
+        client1 = nullptr;
+    }
+    if(client2){
+        client2->close();
+        client2 = nullptr;
+    }
+}
+
+MainWindow::MainWindow(QWidget* parent)
+    : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    server = new NetworkServer(this); // 创建一个服务器对象，其父对象为当前窗口
+    server = new NetworkServer(this);  // 创建一个服务器对象，其父对象为当前窗口
 
     ui->ShowClient1->setReadOnly(true);
     ui->ShowClient2->setReadOnly(true);
 
-    connect(ui->PortButton, &QPushButton::clicked, this, &MainWindow::listen_port); // 开启服务器监听
-    connect(ui->restart, &QPushButton::clicked, this, &MainWindow::restart_server); // 重启服务器
+    connect(ui->PortButton, &QPushButton::clicked, this, &MainWindow::listen_port);  // 开启服务器监听
+    connect(ui->restart, &QPushButton::clicked, this, &MainWindow::restart_server);  // 重启服务器
     connect(server, &NetworkServer::receive, this, &MainWindow::receive_from_client);
     // receive 是服务端收到消息后发出的信号，receive_from_client 是处理这个信号的槽函数
+
+    // 每两分钟清理一次客户端
+    QTimer* timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &MainWindow::remove_all_clients);
+    timer->start(120000);
 }
 
 void MainWindow::listen_port() {
@@ -33,8 +49,7 @@ void MainWindow::remove_client(QTcpSocket* client) {
     if (client == client1) {
         client1 = nullptr;
         ui->ShowClient1->setText("");
-    }
-    else if (client == client2) {
+    } else if (client == client2) {
         client2 = nullptr;
         ui->ShowClient2->setText("");
     }
@@ -64,13 +79,11 @@ void MainWindow::receive_from_client(QTcpSocket* client, NetworkData data) {
         this->ui->ShowClient1->setText(data.data2);
         if (client2 && data.op == OPCODE::CHAT_OP)
             send_to_another_client(client2, data);
-    }
-    else if (client == client2) {
+    } else if (client == client2) {
         this->ui->ShowClient2->setText(data.data2);
         if (client1 && data.op == OPCODE::CHAT_OP)
             send_to_another_client(client1, data);
-    }
-    else
+    } else
         QMessageBox::warning(this, "Warning", "Unknown client!");
 }
 
